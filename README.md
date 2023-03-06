@@ -1,8 +1,36 @@
-# SafeTools-Boot [Java 8 ]
+# SafeTools-Boot [Java 8]
 
 安全工具脚手架，名字灵感来源于spring-boot（虽然也不翻译为脚手架）
 
 用于快速搭建安全工具，使聚焦于具体实现逻辑。
 
 ---
+
+## TODO：
+
+1.记得编写文档注释
+
+2.io操作
+
+3.ui
+
+4.使用代理模式，接口
+
+5.http相关操作
+
+---
+
+## 使用教程：
+
+**1.需要修改的地方：**
+
+查阅下列，或者在源代码中查看（文档注释带有**"[+] "**的函数)
+
+```md
+org.sec.input.Logo#PrintLogo
+org.sec.input.Command
+org.sec.start.CommandChoice
+```
+
+
 

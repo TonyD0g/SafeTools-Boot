@@ -10,20 +10,14 @@ public class Application {
 
     public static void start(String[] args) {
         try {
-            // 处理用户输入的参数，如 -h 等
             Command command = new Command();
             JCommander jc = JCommander.newBuilder().addObject(command).build();
             jc.parse(args);
 
-            if (command.help) {
-                jc.usage();
+            if(CommandChoice.CommandChoice(command,jc)){
                 return;
             }
-            if (command.output == null || command.output.equals("")) {
-                command.output = "result.jsp";
-            }
 
-            logger.info("use reflection module");
             doSimple(command);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -34,4 +28,18 @@ public class Application {
 
     }
 
+}
+/** [+] 根据命令自定义选项*/
+class CommandChoice{
+    public static boolean CommandChoice(Command command, JCommander jc) {
+        if (command.help) {
+            jc.usage();
+            return false;
+        }
+        if (command.output == null || command.output.equals("")) {
+            command.output = "result.jsp";
+            return true;
+        }
+        return false;
+    }
 }
