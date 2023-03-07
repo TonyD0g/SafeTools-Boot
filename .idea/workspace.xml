@@ -32,18 +32,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/Coding/SafeTools-Boot/src/main/java/org/sec/http",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "configurable.group.appearance"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Coding/SafeTools-Boot/src/main/java/org/sec/http&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Coding\SafeTools-Boot\src\main\java\org\sec\http" />
@@ -82,6 +82,12 @@
       <workItem from="1678025071291" duration="2984000" />
       <workItem from="1678089572794" duration="3459000" />
       <workItem from="1678108333286" duration="5752000" />
+      <workItem from="1678151075304" duration="1584000" />
+      <workItem from="1678153493099" duration="3657000" />
+      <workItem from="1678160771161" duration="194000" />
+      <workItem from="1678164470205" duration="958000" />
+      <workItem from="1678167599187" duration="3919000" />
+      <workItem from="1678171970240" duration="2777000" />
     </task>
     <servers />
   </component>

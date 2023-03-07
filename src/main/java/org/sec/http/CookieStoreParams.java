@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CookieStoreParams {
     public CookieStore cookieStore;
-    public Map<String, String> params1;
+    public Map<String, String> HttpBodyParams;
     public HttpPost post;
     public CloseableHttpClient httpClient;
     public CloseableHttpResponse response;
