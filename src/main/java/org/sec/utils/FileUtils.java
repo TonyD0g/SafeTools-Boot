@@ -2,6 +2,7 @@ package org.sec.utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,38 @@ public class FileUtils {
         throw new RuntimeException("[Waring] [org.sec.utils.FileUtils] Can not read file: " + filepath);
     }
 
+    /** 读文件*/
+    public static FileReader readForName(String name) throws Exception {
+        FileReader fileName = null;
+        try {
+            fileName = new FileReader(String.format("src/main/java/Data/%s", name));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return fileName;
+    }
+
+    /**读文件*/
+    public static List<String> readLines(String filepath) {
+        return readLines(filepath, "UTF8");
+    }
+
+
+    /** 随机读取某一行 */
+    public static String  randomReadLine(int maxLine,FileReader fileName) throws Exception {
+        int wantLine = (int) (Math.random() * maxLine + 1), line = 1;
+        BufferedReader in = new BufferedReader(fileName);
+        String str;
+        while ((str = in.readLine()) != null) {
+            if (wantLine == line) {
+                return str;
+            }
+            line++;
+        }
+
+        return null;
+    }
+
     /**
      * 写入Bytes
      */
@@ -79,13 +112,6 @@ public class FileUtils {
     }
 
     /**
-     * 读文件
-     */
-    public static List<String> readLines(String filepath) {
-        return readLines(filepath, "UTF8");
-    }
-
-    /**
      * 将所有文件读入List中
      */
     public static List<String> readLines(String filepath, String charsetName) {
@@ -99,7 +125,7 @@ public class FileUtils {
         BufferedReader bufferReader = null;
 
         try {
-            in = new FileInputStream(file);
+            in = Files.newInputStream(file.toPath());
             reader = new InputStreamReader(in, charsetName);
             bufferReader = new BufferedReader(reader);
 
@@ -125,11 +151,11 @@ public class FileUtils {
     /**
      * 输入str,尝试获取其在文件中的行数
      */
-    public static int useStrToGetLineNum(String wantStr) throws Exception {
+    public static int useStrToGetLineNum(BufferedReader reader,String wantStr) throws Exception {
 
         String str;
         int lineNum = 0;
-        while ((str = ReadFile.reader.readLine()) != null) {
+        while ((str = reader.readLine()) != null) {
             lineNum++;
             if (str.equals(wantStr)) {
                 String outcome = String.format("[+] has found that the \"%s\" in the file's lineNum: %d", str, lineNum);
@@ -266,4 +292,5 @@ public class FileUtils {
     public static InputStream getInputStream(String className) {
         return ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + ".class");
     }
+
 }

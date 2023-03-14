@@ -14,6 +14,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -49,7 +50,7 @@
       <recent name="D:\Coding\SafeTools-Boot\src\main\java\org\sec\http" />
     </key>
   </component>
-  <component name="RunManager" selected="应用程序.org.sec.Main">
+  <component name="RunManager" selected="应用程序.regexTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="SafeTools-Boot" />
@@ -64,8 +65,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="regexTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.sec.utils.test.regexTest" />
+      <module name="SafeTools-Boot" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="应用程序.regexTest" />
         <item itemvalue="应用程序.org.sec.Main" />
         <item itemvalue="应用程序.Main" />
       </list>
@@ -88,6 +97,9 @@
       <workItem from="1678164470205" duration="958000" />
       <workItem from="1678167599187" duration="3919000" />
       <workItem from="1678171970240" duration="2777000" />
+      <workItem from="1678717813617" duration="266000" />
+      <workItem from="1678773428740" duration="2897000" />
+      <workItem from="1678777002279" duration="2616000" />
     </task>
     <servers />
   </component>
