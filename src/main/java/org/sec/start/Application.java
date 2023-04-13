@@ -33,7 +33,7 @@ class CommandChoiceTest extends CommandChoice {
      * [+] 重写 命令选择
      */
     public boolean commandChoiceOverWrite(Command command, JCommander jc) {
-        if (CommandChoice.CommandChoice(command, jc)) {
+        if (!CommandChoice.CommandChoice(command, jc)) {
             return false;
         }
         // [+]
