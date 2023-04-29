@@ -17,6 +17,18 @@ public class FileUtils {
     private static final Logger logger = Logger.getLogger(FileUtils.class);
     private static final boolean DEBUG = true;
 
+    /** 创建文件 */
+    public static boolean creatFile(String filePath){
+    File file = new File(filePath);
+    try {
+        file.createNewFile();
+        return true;
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
     /**
      * 获取文件路径
      */
@@ -95,7 +107,7 @@ public class FileUtils {
     }
 
     /**
-     * 将所有文件读入List中
+     * 从文件中按行全部读入List<String>中
      */
     public static List<String> readLines(String filepath, String charsetName) {
         File file = new File(filepath);
@@ -272,7 +284,7 @@ public class FileUtils {
 
         if (!file_exists) {
             boolean flag = dirFile.mkdirs();
-            assert !DEBUG || flag : "[+] [org.sec.utils.FileUtils] Create Directory Failed: " + dirFile.getAbsolutePath();
+            assert !DEBUG || flag : "[-] [org.sec.utils.FileUtils] Create Directory Failed: " + dirFile.getAbsolutePath();
         }
     }
 

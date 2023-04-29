@@ -50,7 +50,6 @@ public class stringUtils {
 
     /** 依据某个符号进行分割,如 splitBySymbol("A-B","-") 切割为 A和B */
     public static String[] splitBySymbol(String str,String regex){
-        StringBuilder[] stringBuilder = new StringBuilder[2];
         return str.split(regex);
     }
 
