@@ -45,7 +45,7 @@ public class FileUtils {
         return String.format("%s%s.class", path, className.replace('.', File.separatorChar));
     }
 
-    /** 根据想要的后缀名读取文件到列表中 */
+    /** 根据想要的后缀名读取文件到列表中  (读取)*/
     public static void getWantSuffixFilePath(String path, String wantSuffix,ArrayList<String> filePathArray) {
         ArrayList<String> filePathList = new ArrayList<>();
         readDir(path, filePathList);
@@ -59,7 +59,7 @@ public class FileUtils {
     }
 
     /**
-     * 根据输入的filePath读取Bytes
+     * 根据输入的filePath读取Bytes (读取)
      */
     public static byte[] readBytes(String filePath) {
         File file = new File(filePath);
@@ -87,7 +87,7 @@ public class FileUtils {
     }
 
     /**
-     * 读文件
+     * 读文件 (读取)
      */
     public static FileReader readForName(String name) throws Exception {
         FileReader fileName = null;
@@ -100,14 +100,14 @@ public class FileUtils {
     }
 
     /**
-     * 读文件
+     * 读文件 (读取)
      */
     public static List<String> readLines(String filepath) {
         return readLines(filepath, "UTF8");
     }
 
     /**
-     * 从文件中按行全部读入List<String>中
+     * 从文件中按行全部读入List<String>中 (读取)
      */
     public static List<String> readLines(String filepath, String charsetName) {
         File file = new File(filepath);
@@ -145,7 +145,7 @@ public class FileUtils {
 
 
     /**
-     * 随机读取某一行
+     * 随机读取某一行 (读取)
      */
     public static String randomReadLine(int maxLine, FileReader fileName) throws Exception {
         int wantLine = (int) (Math.random() * maxLine + 1), line = 1;
@@ -162,7 +162,7 @@ public class FileUtils {
     }
 
     /**
-     * 读文件流
+     * 读文件流 (读取)
      */
     public static byte[] readStream(final InputStream in, final boolean close) {
         if (in == null) {
@@ -188,7 +188,7 @@ public class FileUtils {
     }
 
     /**
-     * 写入Bytes
+     * 写入Bytes (写入)
      */
     public static void writeBytes(String filepath, byte[] bytes) {
         File file = new File(filepath);
@@ -207,9 +207,9 @@ public class FileUtils {
     }
 
     /**
-     * 将多行写到文件
+     * 将多行写到文件,再次使用该函数会清空文件中的内容 (写入)
      */
-    public static void writeLines(String filepath, List<String> lines) {
+    public static void writeLines(String filepath, List<String> lines,boolean append) {
         if (lines == null || lines.size() < 1) return;
 
         File file = new File(filepath);
@@ -221,7 +221,12 @@ public class FileUtils {
         BufferedWriter bufferedWriter = null;
 
         try {
-            out = new FileOutputStream(file);
+            if(append){
+                out = new FileOutputStream(file,true);
+            }
+            else {
+                out = new FileOutputStream(file);
+            }
             writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
             bufferedWriter = new BufferedWriter(writer);
 
@@ -237,7 +242,6 @@ public class FileUtils {
             IOUtils.closeQuietly(out);
         }
     }
-
 
     /**
      * 输入str,尝试获取其在文件中的行数
@@ -289,7 +293,7 @@ public class FileUtils {
     }
 
     /**
-     * 读取dir下的所有文件,返回绝对路径列表
+     * 读取dir下的所有文件,返回绝对路径列表 (读取)
      */
     public static ArrayList<String> readDir(String pathName, ArrayList<String> fileNameList) {
         File folder = new File(pathName);
@@ -311,7 +315,7 @@ public class FileUtils {
     }
 
     /**
-     * 读取 WebDir
+     * 读取 WebDir (读取)
      */
     public static Set<String> readWebDir(String webDir, Set<String> webDirSet) {
         ArrayList<String> allFileName = new ArrayList<>();

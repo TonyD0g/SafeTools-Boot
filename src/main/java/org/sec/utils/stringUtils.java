@@ -169,6 +169,7 @@ public class stringUtils {
         return relativePath.substring(0, relativePath.length() - 1);         //抛弃最后一个\\
     }
 
+    /** unicode编码 */
     private static String unicodeEncoding(final String gbString) {
         char[] utfBytes = gbString.toCharArray();
         StringBuilder unicodeBytes = new StringBuilder();
@@ -181,5 +182,24 @@ public class stringUtils {
         }
         return unicodeBytes.toString();
     }
+/**
+     * 返回当前时间(yyyy-MM-dd HH:mm:ss)
+     */
+    public static String thisTime() {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return dateFormat.format(date);
+    }
+
+    /**
+     * 改变时间,如让时间加10分钟
+     */
+    public static String changeTime(Date thisTime, long minutes) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        minutes = minutes * 60 * 1000;
+        Date afterDate = new Date(thisTime.getTime() + minutes);//30分钟后的时间
+        return dateFormat.format(afterDate);
+    }
+
 }
 
