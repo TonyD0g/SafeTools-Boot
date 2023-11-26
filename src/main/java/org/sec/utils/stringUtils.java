@@ -1,96 +1,51 @@
 package org.sec.utils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class stringUtils {
     /**
-     * byte数组直接转为Hex Stream,如byte = 0xfa,直接拼接到String对象中：String a = "fa";
+     * 返回被 两两分割 的数组
      */
-    public static String byteArrayToHex(byte[] bytes) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (byte b : bytes) {
-            stringBuilder.append(String.format("%02x", b));
+    public static int[] splitStr(String key) {
+        StringBuilder str = new StringBuilder();
+        str.append(key);
+        // 两两分组
+        int l = 2, i = 0, m = 0;
+        for (; i + m < str.length(); i++) {
+            if (i % l == 0 && i != 0) {
+                str.insert(i + m, ",");
+                m++;
+            }
         }
-        return stringBuilder.toString();
-    }
+        i = 0;
+        String se = str.toString();
+        String[] a = se.split(",");
+        int[] intArray = new int[key.length() / 2];
+        for (; i < key.length() / 2; i++) {
+            String j = a[i];
+            if (j == null) {
+                break;
+            }
 
-    /**
-     * Hex Stream直接转为byte数组,类似于python的 b"\x12"
-     *
-     * @return
-     */
-    public static byte[] hexToByteArray(String hexString) {
-        return DatatypeConverter.parseHexBinary(hexString); // 转换为字节数组
-    }
-
-    /**
-     * 两个byte数组进行合并为一个byte数组
-     */
-    public static byte[] byteMerger(byte[] bt1, byte[] bt2) {
-        byte[] bt3 = new byte[bt1.length + bt2.length];
-        System.arraycopy(bt1, 0, bt3, 0, bt1.length);
-        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
-        return bt3;
-    }
-
-    /**
-     * 将\x开头的16进制转换为不带\x
-     */
-    public static String decodeX(String str) throws UnsupportedEncodingException {
-        String s1 = str.replaceAll("\\\\x", "%");
-        return URLDecoder.decode(s1, "utf-8");
-    }
-
-    /**
-     * 将string转为\x开头的16进制字符串
-     */
-    public static String parseStringToX(String str) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (byte aloneByte : str.getBytes(StandardCharsets.UTF_8)) {
-            stringBuilder.append("\\x" + Integer.toHexString(aloneByte));
+            intArray[i] = Integer.parseInt(j);
+            ;
         }
-        return stringBuilder.toString();
-    }
 
-    /**
-     * 返回被 几几分割 的数组
-     */
-    public static String[] splitStr(String str, int splitNum) {
-        int splitLength = 0;
-        if (str.length() % 2 != 0) {
-            splitLength = (str.length() / 2) + 1;
-        } else {
-            splitLength = (str.length() / 2);
-        }
-        String[] strings = new String[splitLength];
-        for (int i = 0; i < splitLength; i++) {
-            strings[i] = str.substring(i, i + splitNum);
-        }
-        return strings;
+        return intArray;
     }
-
 
     /**
      * 根据长度返回随机字符串
      */
-    public static String getRandomString(String randomList, int length) {
+    public static String getRandomString(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            int number = random.nextInt(randomList.length());
-            sb.append(randomList.charAt(number));
+            int number = random.nextInt(62);
+            sb.append(str.charAt(number));
         }
         return sb.toString();
     }
@@ -99,6 +54,7 @@ public class stringUtils {
      * 依据某个符号进行分割,如 splitBySymbol("A-B","-") 切割为 A和B
      */
     public static String[] splitBySymbol(String str, String regex) {
+        StringBuilder[] stringBuilder = new StringBuilder[2];
         return str.split(regex);
     }
 
@@ -107,7 +63,7 @@ public class stringUtils {
      *
      * @return
      */
-    public static String[] handleFieldType(String str) {
+    public static String[] hanleFieldType(String str) {
         /* 如Ljava.lang.Object;  就要被拆开为  L java.lang.Object ;
          主要有这几种类型: B - byte，C - char，D - double，F - float，I - int，J - long，S - short，Z - boolean，V - void，L - 对象类型( 如Ljava/lang/String; )，数组 - 每一个维度前置使用[表示
            (这几种类型可以随意组合!,所以要做好对应的处理,如 IL java/lang/String;)
@@ -170,12 +126,13 @@ public class stringUtils {
             }
             ++num;
         }
+
         return afterDecodeName;
     }
 
     private static String decodeUnicode(final String dataStr) {
         int start = 0;
-        int end = 0;
+        int end;
         final StringBuilder buffer = new StringBuilder();
         while (start > -1) {
             end = dataStr.indexOf("\\u", start + 2);
@@ -186,18 +143,24 @@ public class stringUtils {
                 charStr = dataStr.substring(start + 2, end);
             }
             char letter = 0;
-            int flag = 0;
             try {
-                letter = (char) Integer.parseInt(charStr, 16); // 16进制转为int,int转char
-                flag = 1;
-            } catch (Exception ignored) {
-
+                if (charStr.matches("[0-9a-fA-F]+")) {
+                    int unicode = Integer.parseInt(charStr, 16); // 16进制转为int
+                    if (Character.isValidCodePoint(unicode)) { // 检查是否为有效Unicode字符
+                        letter = (char) unicode;
+                    } else {
+                        // 无效Unicode字符处理：将原始字符序列添加到buffer中
+                        buffer.append("\\u").append(charStr);
+                    }
+                }else {
+                    // 转换错误，将原始字符序列添加到buffer中
+                    buffer.append("\\u").append(charStr);
+                }
+            } catch (Exception e) {
+                // 转换错误，将原始字符序列添加到buffer中
+                buffer.append("\\u").append(charStr);
             }
-            if (flag == 1) {
-                buffer.append(letter);
-            } else {
-                buffer.append(charStr);
-            }
+            buffer.append(letter);
             start = end;
         }
         return buffer.toString();
@@ -210,7 +173,7 @@ public class stringUtils {
         names = encodeRelativePath.split(separator);                    //兼容windows和linux的分隔符
         StringBuilder relativePath = new StringBuilder();
         for (String name : names) {
-            if (name.length() != 0) {
+            if (!name.isEmpty()) {
                 relativePath.append(decodePath(name));
                 relativePath.append(File.separator);
             }
@@ -218,9 +181,6 @@ public class stringUtils {
         return relativePath.substring(0, relativePath.length() - 1);         //抛弃最后一个\\
     }
 
-    /**
-     * unicode编码
-     */
     private static String unicodeEncoding(final String gbString) {
         char[] utfBytes = gbString.toCharArray();
         StringBuilder unicodeBytes = new StringBuilder();
@@ -233,25 +193,5 @@ public class stringUtils {
         }
         return unicodeBytes.toString();
     }
-
-    /**
-     * 返回当前时间(yyyy-MM-dd HH:mm:ss)
-     */
-    public static String thisTime() {
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        return dateFormat.format(date);
-    }
-
-    /**
-     * 改变时间,如让时间加10分钟
-     */
-    public static String changeTime(Date thisTime, long minutes) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        minutes = minutes * 60 * 1000;
-        Date afterDate = new Date(thisTime.getTime() + minutes);//30分钟后的时间
-        return dateFormat.format(afterDate);
-    }
-
 }
 

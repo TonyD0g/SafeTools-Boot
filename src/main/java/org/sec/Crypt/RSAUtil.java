@@ -1,6 +1,12 @@
-package org.sec.Crypt;
+package org.sec.Utils;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -109,43 +115,54 @@ public class RSAUtil {
 
 
     /**
-     * 公钥加密
+     * 分段加密
      */
-    public static String encrypt(String text, String publicKeyStr) {
-
-        try {
-            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKeyStr));
-            byte tempBytes[] = cipher.doFinal(text.getBytes());
-            String secretText = Base64.getEncoder().encodeToString(tempBytes);
-            return secretText;
-        } catch (Exception e) {
-            throw new RuntimeException("加密字符串[" + text + "]时遇到异常", e);
-        }
-
+    public static String encrypt(String plainText, String publicKeyStr) throws Exception {
+        byte[] plainTextArray = plainText.getBytes();
+        PublicKey publicKey = getPublicKey(publicKeyStr);
+        Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        int inputLen = plainTextArray.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        int i = 0;
+        byte[] encryptText = segmentation(plainTextArray, cipher, inputLen, out, offSet, i, MAX_ENCRYPT_BLOCK);
+        return Base64.getEncoder().encodeToString(encryptText);
     }
 
     /**
-     * 私钥解密
-     *
-     * @param secretText
+     * 分段解密
      */
-    public static String decrypt(String secretText, String privateKeyStr) {
-
-        try {
-            //生成公钥
-            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKeyStr));
-            // 密文解码
-            byte[] secretText_decode = Base64.getDecoder().decode(secretText.getBytes());
-            byte tempBytes[] = cipher.doFinal(secretText_decode);
-            String text = new String(tempBytes);
-            return text;
-        } catch (Exception e) {
-            throw new RuntimeException("解密字符串[" + secretText + "]时遇到异常", e);
-        }
-
+    public static String decrypt(String encryptTextHex, String privateKeyStr) throws Exception {
+        byte[] encryptText = Base64.getDecoder().decode(encryptTextHex);
+        PrivateKey privateKey = getPrivateKey(privateKeyStr);
+        Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        int inputLen = encryptText.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        int i = 0;
+        // 对数据分段解密
+        byte[] plainText = segmentation(encryptText, cipher, inputLen, out, offSet, i, MAX_DECRYPT_BLOCK);
+        return new String(plainText);
     }
+
+    private static byte[] segmentation(byte[] encryptText, Cipher cipher, int inputLen, ByteArrayOutputStream out, int offSet, int i, int maxDecryptBlock) throws IllegalBlockSizeException, BadPaddingException, IOException {
+        byte[] cache;
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > maxDecryptBlock) {
+                cache = cipher.doFinal(encryptText, offSet, maxDecryptBlock);
+            } else {
+                cache = cipher.doFinal(encryptText, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * maxDecryptBlock;
+        }
+        out.close();
+        return out.toByteArray();
+    }
+
 
     public static void main(String[] args) {
         Map<String, Object> keyMap;
