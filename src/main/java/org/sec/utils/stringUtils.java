@@ -1,10 +1,13 @@
 package org.sec.utils;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class stringUtils {
+    private static final Logger logger = Logger.getLogger(stringUtils.class);
     /**
      * 返回被 两两分割 的数组
      */
@@ -36,24 +39,20 @@ public class stringUtils {
         return intArray;
     }
 
-    /**
-     * 根据长度返回随机字符串
-     */
-    public static String getRandomString(int length) {
-        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(62);
+    /** 根据长度返回随机字符串 */
+    public static String getRandomString(int length){
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random=new Random();
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(62);
             sb.append(str.charAt(number));
         }
         return sb.toString();
     }
 
-    /**
-     * 依据某个符号进行分割,如 splitBySymbol("A-B","-") 切割为 A和B
-     */
-    public static String[] splitBySymbol(String str, String regex) {
+    /** 依据某个符号进行分割,如 splitBySymbol("A-B","-") 切割为 A和B */
+    public static String[] splitBySymbol(String str,String regex){
         StringBuilder[] stringBuilder = new StringBuilder[2];
         return str.split(regex);
     }
@@ -61,9 +60,8 @@ public class stringUtils {
     /**
      * 对类型进行处理,如Ljava.lang.Object;中的L和java.lang.Object
      *
-     * @return
      */
-    public static String[] hanleFieldType(String str) {
+    public static String[] handleFieldType(String str) {
         /* 如Ljava.lang.Object;  就要被拆开为  L java.lang.Object ;
          主要有这几种类型: B - byte，C - char，D - double，F - float，I - int，J - long，S - short，Z - boolean，V - void，L - 对象类型( 如Ljava/lang/String; )，数组 - 每一个维度前置使用[表示
            (这几种类型可以随意组合!,所以要做好对应的处理,如 IL java/lang/String;)
@@ -111,7 +109,7 @@ public class stringUtils {
                 try {
                     afterDecode = decodeUnicode("\\u" + part.substring(0, 4));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("An error occurred", e);
                 }
             }
 
