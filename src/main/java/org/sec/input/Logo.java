@@ -1,4 +1,4 @@
-package org.sec.input;
+package org.sec.Input;
 
 public abstract class Logo {
     /** [+] 输出logo */

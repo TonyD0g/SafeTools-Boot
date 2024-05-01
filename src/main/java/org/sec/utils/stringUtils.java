@@ -1,10 +1,11 @@
-package org.sec.utils;
+package org.sec.Utils;
 
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class stringUtils {
     private static final Logger logger = Logger.getLogger(stringUtils.class);
@@ -33,7 +34,6 @@ public class stringUtils {
             }
 
             intArray[i] = Integer.parseInt(j);
-            ;
         }
 
         return intArray;
@@ -191,6 +191,7 @@ public class stringUtils {
         }
         return unicodeBytes.toString();
     }
+
     /**
      * 参数: 文件路径、想过滤的字符串 . 输出: 该文件路径的文件名
      */
@@ -228,6 +229,18 @@ public class stringUtils {
     public static boolean deleteByFileName(String filePath){
         File fileToDelete = new File(filePath);
         return fileToDelete.delete();
+    }
+
+    /** 路径安全检查, 返回 false 就是不通过,被安全拦截**/
+    public static boolean pathSecurityCheck(boolean operatingSystemModel,String content){
+        // 暂不考虑 mac ,因为我没 mac
+        String pathRegex;
+        if (operatingSystemModel) {
+            pathRegex = "^[a-zA-Z]:\\\\(?:[^\\\\/:*?\"<>|\\r ]+\\\\)*[^\\\\/:*?\"<>|\\r ]*\\.html$"; // Windows路径示例:    C:\2024.05.01.09.51.html
+        } else {
+            pathRegex = "^/([^/]+/)*[^/]+\\.html$"; // Linux路径示例:   /home/user/file.html
+        }
+        return Pattern.matches(pathRegex,content);
     }
 }
 

@@ -1,8 +1,8 @@
 package org.sec;
 
 import org.apache.log4j.Logger;
-import org.sec.input.Logo;
-import org.sec.start.Application;
+import org.sec.Input.Logo;
+import org.sec.Start.Application;
 
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);

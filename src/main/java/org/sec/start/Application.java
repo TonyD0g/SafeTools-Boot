@@ -1,11 +1,9 @@
-package org.sec.start;
+package org.sec.Start;
 
 import com.beust.jcommander.JCommander;
 import org.apache.log4j.Logger;
-import org.sec.input.Command;
-import org.sec.input.CommandChoice;
-
-import java.io.IOException;
+import org.sec.Input.Command;
+import org.sec.Input.CommandChoice;
 
 public class Application {
     private static final Logger logger = Logger.getLogger(Application.class);
